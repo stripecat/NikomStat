@@ -1,0 +1,169 @@
+NikomStat
+=========
+
+Version 1.1 - Släppt 2019-07-17
+Skapat av Erik Zalitis på The ERICADE Network BBS.
+Supportas på https://the.ericade.net/?p=938
+
+Versionshistoria
+================
+
+Version 1.1 - Släppt 2019-07-17
+-------------------------------
+
+(Buggfix) Första parametern lästes aldrig in.
+
+(Ny funktion) - Parametern n som sätter poäng för antalet veckor användaren
+varit inaktiv. Sätts normalt till ett negativt värde för att "straffa"
+inaktiva användare, så att de åker ner från topplistan.
+
+Version 1.0 - Släppt 2019-07-14
+-------------------------------
+
+Första versionen.
+
+
+Kontakt
+=======
+
+Jag kan nås på epostadressen erik@zalitis.se.
+
+Finns också på BBSen The ERICADE Network på:
+
+- SSH, the.ericade.net:22. Inloggning:bbs med lösen bbs.
+- Telnet, the.ericade.net:23.
+
+Följ min berättelse om en BBS någonstans i Stockholm under 90-talet:
+https://the.ericade.net
+
+Förbehåll
+=========
+
+Jag tar inget ansvar för eventuella problem som kan uppstå med detta program.
+Läs denna manual innan du installerar programmet. Dvs, läs den nu!
+
+Vad är NikomStat?
+=================
+
+Tidigare har det funnits en del skript som använt NikomUS för att generera
+topplistor i Nikom. NikomUS fungerar inte med versioner av Nikom nyare än
+version 1.61. Då ingen verkar ha kunnit hitta orsaken till detta, valde jag
+att bygga en ersättare i Arexx.
+
+NikomStat ersätter den vildvuxna flora med skript som tillsammans med NikomUS
+användes för att generera topplistorna. NikomStat genererar direkt färdiga
+listor som kan användas i basen utan att man måste ha några skript som
+formatterar datat. Resultatet ser i princip likadant ut som de listor
+som du är van vid.
+
+Fördelar med NikomStat
+- Två filer behövs för att generera alla listor att så de blir helt uniforma.
+- Installationen är extremt enkel och tar bara några minuter.
+- Det är extremt enkelt för den som kan Arexx att lägga till funktioner
+eller ändra hur rapporterna ser ut.
+- Skripten använder standardfunktioner i AmigaOS/Arexx/Nikom och borde vara
+hyffsat framtidssäkra.
+- Varje ny lista du vill ha skrivs in i maketoplist.rexx som en ny rad.
+Detta gör det trivialt att skapa alla listor du någonsin skulle kunna drömma
+om.
+
+Installation
+============
+
+1. Packa upp arkivet.
+2. Se till att filerna nikomstat.rexx och maketoplist.rexx hamnar i nikom:rexx
+3. Öppna nikomstat.rexx i en bra editor (inte ed!) och ändra namnet på din
+BBS i variabeln bbs.
+4. Öppna maketoplist.rexx i valfri editor och kolla om du vill ändra någonting.
+Detta är generellt sett inte nödvändigt. Men du kanske har andra åsikter
+om hur poängen ska beräknas. Vad vet jag? :)
+5. Lägg in "rx nikom:rexx/maketoplist.rexx" i din crontab-fil. Detta förutsatt
+att du kör cronjob och har en cronprogramvara installerad. Annars får du
+köra skripten manuellt.
+
+För att generera listorna, kör du "rx nikom:rexx/maketoplist.rexx". Då kommer
+den att köra några minuter och bygga alla listor som definierats.
+
+Exempel
+=======
+
+rx nikom:rexx/nikomstat.rexx i1 r0 w10 u20 d-20 fnikom:texter/svenska/g.txt
+
+Denna kommandorad gör att en fil som heter g.txt skapas i 
+nikom:texter/svenska/. Poängen beräknas som 1 poäng för varje inloggning,
+0 poäng för varje läst text, 10 poäng för varje skriven text, 20 poäng för
+varje uppladdad fil och avdrag på 20 poäng för varje nedladdad fil. 
+
+
+Att notera
+==========
+
+- Avsaknade funktioner
+
+Parametern "p" är inte implementerad. Denna parameter ska normalt göra att
+NikomStat visar vad den gör. Kommer troligen i nästa version.
+
+- Förvalda poäng
+
+Om du inte anger några parametrar, kommer poäng ges enligt:
+
+i=inloggningar=1 poäng
+r=last=0 poäng
+w=skrivet=5 poäng
+d=nedladdat=-20 poäng
+u=uppladdat=20 poäng
+t=inloggadisekunder=0 poäng
+n=inaktivaveckor=0 poäng
+
+- Parametrar
+
+i - Poäng för inloggningar. Sätter du parametern i10 ger du 10 poäng för 
+varje inloggning. Detta format gäller alla parametrar som ger poäng. Notera
+att det INTE är något mellanslag mellan i och poängsiffran.
+
+w - Poäng för skrivna texter.
+
+r - Poäng för lästa texter.
+
+t - Poäng för antal inloggade sekunder.
+
+u - Poäng för antal uploads.
+
+d - Poäng för antal downloads. Man sätter normalt minuspoäng för detta. 
+ex.vis d-10. 
+
+n - Poäng för antalet inaktiva veckor. Man sätter normalt minuspoäng för
+detta. ex.vis n-2.
+
+f - Filnamn. fram:katt.txt lägger den färdiga rapporten i ram: som katt.txt.
+Som standard blir filnamnet ram:temp.dat om man inte sätter parametern.
+
+h - Generera huvud. Utan huvud blir det bara en lista. Som standard genereras
+ ett huvud.
+
+l - Namn på listan. Skriver du lInloggnings, kommer rapporthuvudet skriva
+"Inloggningslistan". Suffixet "listan" kan ändras i nikomstat.rexx.
+
+q - Vänd listan upp och ner. Dvs, den som får lägst poäng hamnar högst upp
+i rankningen. q0 slår från och q1 slår till värdet. Som standard är det
+högst poäng som kommer högst upp i listan. Alltså q0. 
+
+Om man inte anger en parameter, används ett standardvärde. Det är därför
+viktigt att allt ange alla parametrar även om de ger 0 poäng för att se till
+att poängen blir korrekt. Så om du vill garantera att inloggningar t.ex. ger
+noll poäng, sätter du i0, annars kommer inloggningar tilldelas 1 poäng per
+inloggning om du inte anger i-parametern.
+
+Exempel:
+
+rx nikom:rexx/nikomstat.rexx i1 w1 u10 d-20 n-2 fram:lista.txt
+
+
+- Minnesanvändning
+
+NikomStat genererar två filer i ram:. Dessa finns bara medan skriptet körs 
+och tas sedan bort. Däremot läser skriptet in alla användare i minnet
+medan den kör. Varje användare tar upp runt 80 bytes i minnet. 
+Så har du 4500 användare i basen, kommer NikomStat behöva drygt 350 kb för att
+hålla dem i minnet. Så fort skriptet körts klart, lämnas minnet tillbaka.
+Men om du har många användare och ont om minne, bör du inte använda NikomStat.
