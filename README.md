@@ -7,3 +7,5 @@ kommandot.
 Supportas på https://the.ericade.net/?p=938
 
 Skrivet av Erik Zalitis på The ERICADE Network BBS.
+
+Links: https://github.com/punktniklas/NiKom - The Nikom BBS system that this code is meant to run on.
